@@ -1,0 +1,2 @@
+nickname:admin;password:admin1234;email:admin@gmail.com;role:Admin
+nickname:rin;password:rin123;email:rin@gmail.com;role:Receptionist
