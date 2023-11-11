@@ -34,14 +34,14 @@ def parse_txt(path: str) -> List[dict]:
     return data
 
 
-users = parse_txt("users.txt")
+users = parse_txt("database/users.txt")
 
 
 def save_users() -> None:
     """The function overwrites the contents of the file
     after changes are made to the user list
     """
-    with open("users.txt", "w") as file:
+    with open("database/users.txt", "w") as file:
         for user in users:
             user_data = ""
             for key, value in user.items():

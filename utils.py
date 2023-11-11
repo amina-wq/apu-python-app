@@ -33,10 +33,10 @@ def login():
 
 def show_menu(user):
     """Displays menu depending on the users role"""
-    from admin import admin_menu
-    from receptionist import receptionist_menu
-    from tutor import tutor_menu
-    from student import student_menu
+    from users.admin import admin_menu
+    from users.receptionist import receptionist_menu
+    from users.tutor import tutor_menu
+    from users.student import student_menu
 
     role = user.get("role")
 
