@@ -143,7 +143,7 @@ def update_profile(user: dict, menu_extension: Optional[list] = None) -> None:
 
         new_value = input(f"Set new {key}: ")
 
-        if user[key] == 'password':
+        if user[key] == "password":
             new_value = md5(new_value.encode()).hexdigest()
         user[key] = new_value
 
