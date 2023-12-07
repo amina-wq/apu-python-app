@@ -2,10 +2,6 @@ from constants import ADMIN, RECEPTIONIST, TUTOR, STUDENT
 from database import users
 
 
-def logout():
-    raise NotImplementedError
-
-
 def login():
     """User login function. Has a limit of 3 login attempts
     Returns:
@@ -29,6 +25,13 @@ def login():
     if not selected_user:
         print("Too many attempts")
     return selected_user
+
+
+def logout(user):
+    if user:
+        print(f'Logging out user: {user["email"]}')
+    else:
+        print("No user is currently logged in")
 
 
 def show_menu(user):
