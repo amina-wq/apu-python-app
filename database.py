@@ -1,4 +1,5 @@
 from typing import Optional, List
+from hashlib import md5
 
 
 def parse_txt(path: str) -> List[dict]:
@@ -77,7 +78,7 @@ def register_user(
     """
     user = {
         "nickname": nickname,
-        "password": password,
+        "password": md5(password.encode()).hexdigest(),
         "email": email,
         "role": role,
     }
@@ -136,11 +137,14 @@ def update_profile(user: dict, menu_extension: Optional[list] = None) -> None:
 
         while True:
             menu_choice = input("Enter your choice: ")
-            if menu_choice.isdigit() and 0 < int(menu_choice) < len(menu):
+            if menu_choice.isdigit() and 0 < int(menu_choice) <= len(menu):
                 break
         key = list(menu.keys())[int(menu_choice) - 1]
 
         new_value = input(f"Set new {key}: ")
+
+        if user[key] == 'password':
+            new_value = md5(new_value.encode()).hexdigest()
         user[key] = new_value
 
         save_users()
