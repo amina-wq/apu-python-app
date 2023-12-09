@@ -63,7 +63,9 @@ def tutor_menu(user):
         elif command == 2:
             print("What information do you want to delete?")
             available_classes = show_available_classes(user, class_info)
-            command = int(input("What class would you like to delete information of "))
+            command = int(
+                input("What class would you like to delete information of ")
+            )
             for i in available_classes:
                 if i.get("index") == command:
                     while True:
@@ -74,10 +76,10 @@ def tutor_menu(user):
                             print("This information doesn`t exists")
                             continue
                         if (
-                                key == "name"
-                                or key == "start"
-                                or key == "end"
-                                or key == "id"
+                            key == "name"
+                            or key == "start"
+                            or key == "end"
+                            or key == "id"
                         ):
                             i[key] = None
                         else:
