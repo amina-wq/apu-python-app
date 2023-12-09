@@ -37,7 +37,8 @@ def manage_tutor():
         name = input("Enter employees name: ")
         password = input("Set employees password: ")
         email = input("Enter employees email: ")
-        register_user(name, password, email, TUTOR)
+        classes = input("Enter employee classes separated by ',': ").split(",")
+        register_user(name, password, email, TUTOR, classes=classes)
     elif choice == "2":
         email = input("Enter the employees email: ")
         delete_user(email)
