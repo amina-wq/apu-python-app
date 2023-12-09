@@ -4,7 +4,8 @@ def receptionist_menu(user):
         "2. Update Subject Enrollment",
         "3. Accept Payment and Generate Receipt",
         "4. Delete Completed Students",
-        "5. Update profile" "6. Logout",
+        "5. Update profile",
+        "6. Logout",
     ]
     print("\n".join(menu))
     choice = input("Enter your choice: ")

@@ -1,2 +1,2 @@
-nickname:admin;password:admin1234;email:admin@gmail.com;role:Admin
-nickname:rin;password:rin123;email:rin@gmail.com;role:Receptionist
+nickname:admin;password:c93ccd78b2076528346216b3b2f701e6;email:admin@gmail.com;role:Admin
+nickname:gigi;password:d91ec1d45535ebf3d8f6882217d10676;email:gigi@gmail.com;role:Tutor

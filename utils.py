@@ -1,9 +1,6 @@
+from hashlib import md5
 from constants import ADMIN, RECEPTIONIST, TUTOR, STUDENT
 from database import users
-
-
-def logout():
-    raise NotImplementedError
 
 
 def login():
@@ -16,8 +13,11 @@ def login():
     while attempts > 0:
         email = input("Enter email: ")
         password = input("Enter password: ")
+        hashed_password = md5(password.encode()).hexdigest()
+        # email = 'admin@gmail.com'
+        # password = 'admin1234'
         for user in users:
-            if user["email"] == email and user["password"] == password:
+            if user["email"] == email and user["password"] == hashed_password:
                 selected_user = user
                 break
         else:
@@ -29,6 +29,13 @@ def login():
     if not selected_user:
         print("Too many attempts")
     return selected_user
+
+
+def logout(user):
+    if user:
+        print(f'Logging out user: {user["email"]}')
+    else:
+        print("No user is currently logged in")
 
 
 def show_menu(user):

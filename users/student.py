@@ -1,9 +1,14 @@
+from database import update_profile
+from utils import logout
+
+
 def student_menu(user):
     menu = [
         "1. Class Schedule",
         "2. Change subject",
         "3. Course Fee",
-        "4. Update profile" "5. Logout",
+        "4. Update profile",
+        "5. Logout",
     ]
     print("\n".join(menu))
     choice = input("Enter your choice: ")
@@ -14,8 +19,8 @@ def student_menu(user):
     elif choice == "3":
         pass
     elif choice == "4":
-        pass
+        update_profile(user)
     elif choice == "5":
-        pass
+        return logout(user)
     else:
         raise Exception("Invalid choice. Try again")

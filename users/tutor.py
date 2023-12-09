@@ -4,17 +4,18 @@ from utils import logout
 
 
 def tutor_menu(user):
-    print(
-        "1. Show your classes\n"
-        "2. Add class info\n"
-        "3. Update/delete class info\n"
-        "4. View students enrolled\n"
-        "5. Update profile\n"
-        "6. Logout"
-    )
+    menu = [
+        "1. Show your classes",
+        "2. Add class info",
+        "3. Update/delete class info",
+        "4. View students enrolled",
+        "5. Update profile",
+        "6. Logout",
+    ]
+    print("\n".join(menu))
     class_info = parse_txt("database/classes.txt")
     users = parse_txt("database/users.txt")
-    command = int(input())
+    command = int(input("Enter your choice: "))
     if command == 1:
         show_available_classes(user, class_info)
 
