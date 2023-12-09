@@ -1,0 +1,3 @@
+name:math;start:14.00;end:16.00;id:1
+name:c++;start:14.00;end:16.00;Tutor:tut;id:2
+name:russian;start:14.00;end:16.00;Tutor:tut;id:3
