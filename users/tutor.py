@@ -13,11 +13,11 @@ def tutor_menu(user):
         "6. Logout"
     )
     class_info = parse_txt("database/classes.txt")
-
     users = parse_txt("database/users.txt")
     command = int(input())
     if command == 1:
         show_available_classes(user, class_info)
+
     elif command == 2:
         available_classes = show_available_classes(user, class_info)
         command = int(
@@ -76,17 +76,16 @@ def tutor_menu(user):
                             print("This information doesn`t exists")
                             continue
                         if (
-                            key == "name"
-                            or key == "start"
-                            or key == "end"
-                            or key == "id"
+                                key == "name"
+                                or key == "start"
+                                or key == "end"
+                                or key == "id"
                         ):
                             i[key] = None
                         else:
                             i.pop(key)
                         break
             merge_classes(available_classes, class_info)
-
 
     elif command == 4:
         for i in users:
@@ -95,9 +94,6 @@ def tutor_menu(user):
                     print(
                         i["nickname"], " ", common_check(i, user, class_info)
                     )
-
-
-
 
     elif command == 5:
         update_profile(user)
