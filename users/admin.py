@@ -1,6 +1,6 @@
 from utils import logout
 from database import register_user, delete_user, update_profile
-from constants import RECEPTIONIST
+from constants import RECEPTIONIST, TUTOR
 
 
 def manage_receptionists():
@@ -25,6 +25,32 @@ def manage_receptionists():
         raise Exception("Invalid choice. Try again")
 
 
+def manage_tutor():
+    menu = [
+        "1. Register Tutor",
+        "2. Delete Tutor",
+        "3. Main menu",
+    ]
+    print("\n".join(menu))
+    choice = input("Enter your choice: ")
+    if choice == "1":
+        name = input("Enter employees name: ")
+        password = input("Set employees password: ")
+        email = input("Enter employees email: ")
+        register_user(name, password, email, TUTOR)
+    elif choice == "2":
+        email = input("Enter the employees email: ")
+        delete_user(email)
+    elif choice == "3":
+        return
+    else:
+        raise Exception("Invalid choice. Try again")
+
+
+def view_monthly_income():
+    pass
+
+
 def admin_menu(user):
     menu = [
         "1. Register/Delete Tutors",
@@ -38,7 +64,7 @@ def admin_menu(user):
         print("\n".join(menu))
         choice = input("Enter your choice: ")
         if choice == "1":
-            pass
+            manage_tutor()
         elif choice == "2":
             manage_receptionists()
         elif choice == "3":
@@ -46,6 +72,6 @@ def admin_menu(user):
         elif choice == "4":
             update_profile(user)
         elif choice == "5":
-            logout()
+            return logout(user)
         else:
             raise Exception("Invalid choice. Try again")

@@ -3,7 +3,8 @@ def tutor_menu(user):
         "1. Add Class Information",
         "2. Update/Delete Class Information",
         "3. View List of Students",
-        "4. Update Profile" "5. Logout",
+        "4. Update Profile",
+        "5. Logout",
     ]
     print("\n".join(menu))
     choice = input("Enter your choice: ")
