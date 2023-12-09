@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional, List, Dict
 from hashlib import md5
 
 
@@ -27,10 +27,13 @@ def parse_txt(path: str) -> List[dict]:
         data = []
         for line in file:
             parts = line.split(";")
-            dictionary = {}
+            dictionary: Dict[str, str | List[str]] = {}
             for part in parts:
                 key, value = part.strip().split(":")
-                dictionary[key.strip()] = value.strip()
+                if len(value.split(",")) > 1:
+                    dictionary[key.strip()] = value.strip().split(",")
+                else:
+                    dictionary[key.strip()] = value.strip()
             data.append(dictionary)
     return data
 
@@ -47,7 +50,10 @@ def save_users() -> None:
             user_data = ""
             for key, value in user.items():
                 if key == list(user.keys())[-1]:
-                    user_data += f"{key}:{value}"
+                    if isinstance(value, list):
+                        user_data += f"{key}:{','.join(value)}"
+                    else:
+                        user_data += f"{key}:{value}"
                 else:
                     user_data += f"{key}:{value};"
             file.write(user_data + "\n")
@@ -96,7 +102,9 @@ def delete_user(email: str) -> None:
     save_users()
 
 
-def update_profile(user: dict, menu_extension: Optional[list] = None) -> None:
+def update_profile(
+    user: Dict[str, str | List[str]], menu_extension: Optional[list] = None
+) -> None:
     """
     Updates users profile in text file
     Args:
@@ -143,9 +151,12 @@ def update_profile(user: dict, menu_extension: Optional[list] = None) -> None:
 
         new_value = input(f"Set new {key}: ")
 
-        if user[key] == "password":
-            new_value = md5(new_value.encode()).hexdigest()
-        user[key] = new_value
+        if key == "password":
+            hashed_password = md5(new_value.encode()).hexdigest()
+            user[key] = hashed_password
+        elif len(new_value.split(",")) > 1:
+            values_list = new_value.split(",")
+            user[key] = values_list
 
         save_users()
     else:
