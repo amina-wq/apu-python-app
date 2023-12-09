@@ -76,10 +76,10 @@ def tutor_menu(user):
                             print("This information doesn`t exists")
                             continue
                         if (
-                                key == "name"
-                                or key == "start"
-                                or key == "end"
-                                or key == "id"
+                            key == "name"
+                            or key == "start"
+                            or key == "end"
+                            or key == "id"
                         ):
                             i[key] = None
                         else:
