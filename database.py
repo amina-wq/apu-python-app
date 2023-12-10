@@ -1,6 +1,8 @@
 from typing import Optional, List, Dict
 from hashlib import md5
 
+from constants import ROLES_PRIORITY_MAPPER
+
 
 def parse_txt(path: str) -> List[dict]:
     """The function parses a txt file of the form
@@ -103,13 +105,17 @@ def delete_user(email: str) -> None:
 
 
 def update_profile(
-    user: Dict[str, str | List[str]], menu_extension: Optional[list] = None
+    own_user: Dict[str, str | List[str]],
+    menu_extension: Optional[list] = None,
+    email: Optional[str] = None,
 ) -> None:
     """
     Updates users profile in text file
     Args:
-        user (dict): user that should be updated
+        own_user (dict): user that should be updated
         menu_extension (list): optional list of updatable parameters of user
+        email (str): if you want to update other profile information,
+            you can use email to update
     Examples:
         >>> update_profile(user)
         1. Change password
@@ -127,6 +133,20 @@ def update_profile(
         Enter your choice: 4
         Set new age: 15
     """
+    if email:
+        user = next(
+            iter([user for user in users if user["email"] == email]), None
+        )
+        if (
+            ROLES_PRIORITY_MAPPER[user["role"]]  # type: ignore
+            < ROLES_PRIORITY_MAPPER[own_user["role"]]  # type: ignore
+        ):
+            raise ValueError(
+                "You can not change personal information of this user"
+            )
+    else:
+        user = own_user
+
     if user in users:
         menu = {
             "password": "1. Change password",
