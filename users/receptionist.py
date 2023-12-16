@@ -35,11 +35,13 @@ def manage_student(user):
         guardian_contact = input("Enter Guardian Contact No: ")
         level = input("Enter Level: ")
         intake = input("Enter Intake Month/Year: ")
-        subjects = input("Enter subjects(separated by comma, up to 3): ")
+        subjects = input(
+            "Enter subjects(separated by comma, up to 3): "
+        ).split(",")
 
         fees = 0
         for _class in classes:
-            if _class["name"] in subjects.split(","):
+            if _class["name"] in subjects:
                 fees += int(_class.get("charge", 0))
 
         register_user(

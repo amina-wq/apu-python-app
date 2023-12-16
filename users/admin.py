@@ -45,7 +45,7 @@ def manage_tutor(user):
         name = input("Enter employees name: ")
         password = input("Set employees password: ")
         email = input("Enter employees email: ")
-        classes = input("Enter employee classes separated by ',': ")
+        classes = input("Enter employee classes separated by ',': ").split(",")
         salary = input("Enter employees salary: ")
         register_user(
             name,
