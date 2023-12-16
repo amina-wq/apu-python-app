@@ -1,9 +1,9 @@
 from utils import logout
-from database import register_user, delete_user, update_profile
-from constants import RECEPTIONIST, TUTOR
+from database import register_user, delete_user, update_profile, users
+from constants import RECEPTIONIST, STUDENT, TUTOR
 
 
-def manage_receptionists():
+def manage_receptionists(user):
     menu = [
         "1. Register Receptionist",
         "2. Delete Receptionist",
@@ -15,17 +15,25 @@ def manage_receptionists():
         name = input("Enter employees name: ")
         password = input("Set employees password: ")
         email = input("Enter employees email: ")
-        register_user(name, password, email, RECEPTIONIST)
+        salary = input("Enter employees salary: ")
+        register_user(
+            name,
+            password,
+            email,
+            RECEPTIONIST,
+            salary=salary,
+        )
+        print("The user registered successfully")
     elif choice == "2":
         email = input("Enter the employees email: ")
-        delete_user(email)
+        delete_user(user, email)
     elif choice == "3":
         return
     else:
         raise Exception("Invalid choice. Try again")
 
 
-def manage_tutor():
+def manage_tutor(user):
     menu = [
         "1. Register Tutor",
         "2. Delete Tutor",
@@ -37,11 +45,20 @@ def manage_tutor():
         name = input("Enter employees name: ")
         password = input("Set employees password: ")
         email = input("Enter employees email: ")
-        classes = input("Enter employee classes separated by ',': ").split(",")
-        register_user(name, password, email, TUTOR, classes=classes)
+        classes = input("Enter employee classes separated by ',': ")
+        salary = input("Enter employees salary: ")
+        register_user(
+            name,
+            password,
+            email,
+            TUTOR,
+            classes=classes,
+            salary=salary,
+        )
+        print("The user registered successfully")
     elif choice == "2":
         email = input("Enter the employees email: ")
-        delete_user(email)
+        delete_user(user, email)
     elif choice == "3":
         return
     else:
@@ -49,7 +66,29 @@ def manage_tutor():
 
 
 def view_monthly_income():
-    pass
+    income = 0
+    for user in users:
+        if user["role"] == STUDENT:
+            if user["payment_status"]:
+                status = "Paid"
+                income += int(user["monthly_fee"])
+            else:
+                status = "Pending"
+            print(
+                f"Name: {user['nickname']}, "
+                f"Role: {user['role']}, "
+                f"Fee: {user['monthly_fee']}, "
+                f"Status: {status}"
+            )
+        else:
+            income -= int(user["salary"])
+            print(
+                f"Name: {user['nickname']}, "
+                f"Role: {user['role']}, "
+                f"Salary: {user['salary']} "
+            )
+    print(f"Monthly income: {income}")
+    input("Press 'Enter' key to continue...")
 
 
 def admin_menu(user):
@@ -65,13 +104,16 @@ def admin_menu(user):
         print("\n".join(menu))
         choice = input("Enter your choice: ")
         if choice == "1":
-            manage_tutor()
+            manage_tutor(user)
         elif choice == "2":
-            manage_receptionists()
+            manage_receptionists(user)
         elif choice == "3":
-            pass
+            view_monthly_income()
         elif choice == "4":
-            update_profile(user)
+            try:
+                update_profile(user)
+            except Exception:
+                continue
         elif choice == "5":
             return logout(user)
         else:
