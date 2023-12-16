@@ -5,6 +5,7 @@ from database import (
     register_user,
     delete_user,
     users,
+    classes,
     save_users,
     get_user_by_email,
 )
@@ -35,7 +36,12 @@ def manage_student(user):
         level = input("Enter Level: ")
         intake = input("Enter Intake Month/Year: ")
         subjects = input("Enter subjects(separated by comma, up to 3): ")
-        monthly_fee = input("Enter the monthly fee: ")
+
+        fees = 0
+        for _class in classes:
+            if _class["name"] in subjects.split(","):
+                fees += int(_class.get("charge", 0))
+
         register_user(
             name,
             password,
@@ -49,8 +55,8 @@ def manage_student(user):
             guardian_contact=guardian_contact,
             level=level,
             intake=intake,
-            subjects=subjects.split(","),
-            monthly_fee=monthly_fee,
+            subjects=subjects,
+            monthly_fee=fees,
             payment_status=False,
             completed_studies=False,
         )
@@ -70,7 +76,6 @@ def manage_student(user):
                 "intake",
                 "subjects",
                 "monthly_fee",
-                "payment_status",
                 "completed_studies",
             ],
             student_email,
@@ -91,7 +96,7 @@ def manage_student(user):
 
 def update_student_enrollment(user, email):
     student = get_user_by_email(user, email, role=STUDENT)
-    print(f'Current subjects of the student: {student["subjects"]}')
+    print(f'Current subjects of the student: {", ".join(student["subjects"])}')
     subject_to_be_updated = input(
         "Enter the subject to be replaced"
         "(if more then 1,then separate by comma, up to 3): "
@@ -107,6 +112,13 @@ def update_student_enrollment(user, email):
             list(subject_set - subject_to_be_updated_set) + updated_subject
         )
 
+        fees = 0
+        for _class in classes:
+            if _class["name"] in student["subjects"]:
+                fees += int(_class.get("charge", 0))
+        student["monthly_fee"] = fees
+
+        save_users()
         print("Update was successful! ")
     else:
         print(
@@ -139,8 +151,8 @@ def accept_payment(email):
             f'The sum of {user["monthly_fee"]}\n'
             f"Date: {datetime.now()}"
         )
-
         save_users()
+        input("Press 'Enter' key to continue...")
     else:
         print("This user already paid")
 
