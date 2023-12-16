@@ -95,10 +95,15 @@ def register_user(
     save_users()
 
 
-def delete_user(email: str) -> None:
+def delete_user(own_user: dict, email: str) -> None:
     """Delete user by e-mail"""
     for user in users:
         if user["email"] == email:
+            if (
+                ROLES_PRIORITY_MAPPER[user["role"]]  # type: ignore
+                < ROLES_PRIORITY_MAPPER[own_user["role"]]  # type: ignore
+            ):
+                raise ValueError("You can not delete this user")
             users.remove(user)
             break
     save_users()
@@ -134,16 +139,7 @@ def update_profile(
         Set new age: 15
     """
     if email:
-        user = next(
-            iter([user for user in users if user["email"] == email]), None
-        )
-        if (
-            ROLES_PRIORITY_MAPPER[user["role"]]  # type: ignore
-            < ROLES_PRIORITY_MAPPER[own_user["role"]]  # type: ignore
-        ):
-            raise ValueError(
-                "You can not change personal information of this user"
-            )
+        user = get_user_by_email(own_user, email)
     else:
         user = own_user
 
@@ -181,3 +177,16 @@ def update_profile(
         save_users()
     else:
         raise ValueError("Incorrect user")
+
+
+def get_user_by_email(own_user: dict, email: str, role: Optional[str] = None):
+    user = next(iter([user for user in users if user["email"] == email]), None)
+    if user:
+        if user["role"] != role:
+            return None
+        if (
+            ROLES_PRIORITY_MAPPER[user["role"]]  # type: ignore
+            > ROLES_PRIORITY_MAPPER[own_user["role"]]  # type: ignore
+        ):
+            raise ValueError("You don't have access to get this user")
+    return user

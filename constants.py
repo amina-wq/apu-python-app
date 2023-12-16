@@ -4,8 +4,8 @@ TUTOR = "Tutor"
 STUDENT = "Student"
 
 ROLES_PRIORITY_MAPPER = {
-    ADMIN: 4,
-    RECEPTIONIST: 3,
+    ADMIN: 3,
+    RECEPTIONIST: 2,
     TUTOR: 2,
     STUDENT: 1,
 }
