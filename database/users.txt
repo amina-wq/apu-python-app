@@ -1,2 +1,4 @@
-nickname:admin;password:c93ccd78b2076528346216b3b2f701e6;email:admin@gmail.com;role:Admin
-nickname:gigi;password:d91ec1d45535ebf3d8f6882217d10676;email:gigi@gmail.com;role:Tutor
+nickname:admin;password:admin1234;email:admin@gmail.com;role:Admin
+nickname:rin;password:rin123;email:rin@gmail.com;role:Receptionist
+nickname:tut;password:c81e728d9d4c2f636f067f89cc14862c;email:1;role:Tutor;class_id:1,2,3,4,5,6
+nickname:stu;password:stu123;email:stu@gmail.com;role:Student;class_id:2,4,6,7
