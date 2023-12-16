@@ -1,6 +1,6 @@
 from utils import logout
 from database import register_user, delete_user, update_profile, users
-from constants import RECEPTIONIST, STUDENT
+from constants import RECEPTIONIST, STUDENT, TUTOR
 
 
 def manage_receptionists(user):
@@ -45,13 +45,13 @@ def manage_tutor(user):
         name = input("Enter employees name: ")
         password = input("Set employees password: ")
         email = input("Enter employees email: ")
-        classes = input("Enter employee classes separated by ',': ").split(",")
+        classes = input("Enter employee classes separated by ',': ")
         salary = input("Enter employees salary: ")
         register_user(
             name,
             password,
             email,
-            RECEPTIONIST,
+            TUTOR,
             classes=classes,
             salary=salary,
         )
@@ -88,6 +88,7 @@ def view_monthly_income():
                 f"Salary: {user['salary']} "
             )
     print(f"Monthly income: {income}")
+    input("Press 'Enter' key to continue...")
 
 
 def admin_menu(user):

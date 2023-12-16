@@ -1,0 +1,6 @@
+name:c#;charge:600;dates:mon,wen;start:14.00;end:16.00;id:1
+name:c++;charge:600;dates:sat,sun;start:9.00;end:10.30;id:2
+name:java;charge:500;dates:wen,fri;start:8.00;end:9.45;id:3
+name:python;charge:450;dates:wen,fri;start:8.00;end:9.45;id:4
+name:math;charge:400;dates:wen,fri;start:8.00;end:9.45;id:5
+name:english;charge:300;dates:wen,fri;start:8.00;end:9.45;id:6

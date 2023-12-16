@@ -1,4 +1,4 @@
-from typing import Optional, List, Dict
+from typing import Optional, List, Dict, Any
 from hashlib import md5
 
 from constants import ROLES_PRIORITY_MAPPER
@@ -29,11 +29,13 @@ def parse_txt(path: str) -> List[dict]:
         data = []
         for line in file:
             parts = line.split(";")
-            dictionary: Dict[str, str | List[str]] = {}
+            dictionary: Dict[str, Any | List[Any]] = {}
             for part in parts:
                 key, value = part.strip().split(":")
                 if len(value.split(",")) > 1:
                     dictionary[key.strip()] = value.strip().split(",")
+                elif value.strip() in ["True", "False"]:
+                    dictionary[key.strip()] = value.strip() == "True"
                 else:
                     dictionary[key.strip()] = value.strip()
             data.append(dictionary)
@@ -41,6 +43,7 @@ def parse_txt(path: str) -> List[dict]:
 
 
 users = parse_txt("database/users.txt")
+classes = parse_txt("database/classes.txt")
 
 
 def save_users() -> None:
@@ -51,13 +54,11 @@ def save_users() -> None:
         for user in users:
             user_data = ""
             for key, value in user.items():
-                if key == list(user.keys())[-1]:
-                    if isinstance(value, list):
-                        user_data += f"{key}:{','.join(value)}"
-                    else:
-                        user_data += f"{key}:{value}"
+                postfix = "" if key == list(user.keys())[-1] else ";"
+                if isinstance(value, list):
+                    user_data += f"{key}:{','.join(value)}" + postfix
                 else:
-                    user_data += f"{key}:{value};"
+                    user_data += f"{key}:{value}" + postfix
             file.write(user_data + "\n")
 
 
@@ -95,17 +96,22 @@ def register_user(
     save_users()
 
 
-def delete_user(email: str) -> None:
+def delete_user(own_user: dict, email: str) -> None:
     """Delete user by e-mail"""
     for user in users:
         if user["email"] == email:
+            if (
+                ROLES_PRIORITY_MAPPER[user["role"]]  # type: ignore
+                > ROLES_PRIORITY_MAPPER[own_user["role"]]  # type: ignore
+            ):
+                raise ValueError("You can not delete this user")
             users.remove(user)
             break
     save_users()
 
 
 def update_profile(
-    own_user: Dict[str, str | List[str]],
+    own_user: Dict[str, Any | List[Any]],
     menu_extension: Optional[list] = None,
     email: Optional[str] = None,
 ) -> None:
@@ -134,16 +140,7 @@ def update_profile(
         Set new age: 15
     """
     if email:
-        user = next(
-            iter([user for user in users if user["email"] == email]), None
-        )
-        if (
-            ROLES_PRIORITY_MAPPER[user["role"]]  # type: ignore
-            < ROLES_PRIORITY_MAPPER[own_user["role"]]  # type: ignore
-        ):
-            raise ValueError(
-                "You can not change personal information of this user"
-            )
+        user = get_user_by_email(own_user, email)
     else:
         user = own_user
 
@@ -174,6 +171,8 @@ def update_profile(
         if key == "password":
             hashed_password = md5(new_value.encode()).hexdigest()
             user[key] = hashed_password
+        elif isinstance(user[key], bool):
+            user[key] = new_value == "True"
         elif len(new_value.split(",")) > 1:
             values_list = new_value.split(",")
             user[key] = values_list
@@ -181,3 +180,16 @@ def update_profile(
         save_users()
     else:
         raise ValueError("Incorrect user")
+
+
+def get_user_by_email(own_user: dict, email: str, role: Optional[str] = None):
+    user = next(iter([user for user in users if user["email"] == email]), None)
+    if user:
+        if role and user["role"] != role:
+            return None
+        if (
+            ROLES_PRIORITY_MAPPER[user["role"]]  # type: ignore
+            > ROLES_PRIORITY_MAPPER[own_user["role"]]  # type: ignore
+        ):
+            raise ValueError("You don't have access to get this user")
+    return user

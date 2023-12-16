@@ -1,2 +1,5 @@
-nickname:admin;password:c93ccd78b2076528346216b3b2f701e6;email:admin@gmail.com;role:Admin
-nickname:gigi;password:d91ec1d45535ebf3d8f6882217d10676;email:gigi@gmail.com;role:Tutor
+nickname:admin;password:c93ccd78b2076528346216b3b2f701e6;email:admin@gmail.com;role:Admin;salary:5000
+nickname:ruru;password:6aaadd6b73ca30c20ceb4ad007547f5f;email:ruru;role:Receptionist;salary:3000
+nickname:tutu;password:bdb8c008fa551ba75f8481963f2201da;email:tutu;role:Tutor;classes:c++,c#,java;salary:4000
+nickname:susu;password:57ee1345597f3bb1d50054c299cca0f7;email:susu;role:Student;nationality:susu;passport_no:susu;contact_number:susu;address:susu;guardian_name:susu;guardian_contact:susu;level:1;intake:1;subjects:c++,python;monthly_fee:1050;payment_status:True;completed_studies:True
+nickname:susu1;password:33dbb5f44f629f78596390c2fa900afc;email:susu1;role:Student;nationality:susu1;passport_no:susu1;contact_number:susu1;address:susu1;guardian_name:susu1;guardian_contact:susu1;level:1;intake:1;subjects:c++,c#;monthly_fee:1200;payment_status:False;completed_studies:False
