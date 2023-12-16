@@ -64,9 +64,6 @@ def tutor_menu(user):
                             key = input(
                                 "What type of info do you want to change?\n"
                             )
-                            if key == "id":
-                                print("You can`t delete the id of the class")
-                                break
                             if (
                                 class_info[
                                     available_class.get("position")
@@ -107,9 +104,6 @@ def tutor_menu(user):
                             key = input(
                                 "What type of info do you want to delete?\n"
                             )
-                            if key == "id":
-                                print("You can`t delete the id of the class")
-                                break
                             if (
                                 class_info[
                                     available_class.get("position")
@@ -164,7 +158,7 @@ def tutor_menu(user):
         class_info.append(new_class)
         for i in users:
             if i["email"] == user["email"]:
-                i["class_id"].append(str(new_class["id"]))
+                i["classes"].append(str(new_class["id"]))
                 user = i
                 break
         database.users = users
@@ -198,7 +192,7 @@ def show_available_classes(user, class_info):
     available_class_position = 0
     available_classes = []
     for class_interator in class_info:
-        if class_interator["id"] in user["class_id"]:
+        if class_interator["name"] in user["classes"]:
             print(
                 f"{index}. {class_interator.get('name')}"
                 f" ({class_interator.get('start')}"
@@ -245,10 +239,10 @@ def save(class_list) -> None:
 
 def common_check(student, user, classes):
     common_classes = []
-    for i in student["class_id"]:
-        for j in user["class_id"]:
+    for i in student["classes"]:
+        for j in user["classes"]:
             if i == j:
                 for h in classes:
-                    if h["id"] == i:
+                    if h["name"] == i:
                         common_classes.append(h["name"])
     return common_classes
