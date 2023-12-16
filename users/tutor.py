@@ -1,4 +1,5 @@
 import database
+from constants import STUDENT
 from database import parse_txt
 from database import update_profile
 from utils import logout
@@ -129,13 +130,9 @@ def tutor_menu(user):
             merge_classes(available_classes, class_info)
 
     elif choice == 4:
-        for i in users:
-            if i["role"] == "Student":
-                if common_check(i, user, class_info):
-                    print(
-                        i["nickname"], " ", common_check(i, user, class_info)
-                    )
-
+        for student in database.get_users_by_role(STUDENT):
+            if common_classes := common_check(student, user):
+                print(f'{student["nickname"]}: {", ".join(common_classes)}')
     elif choice == 5:
         update_profile(user, menu_extension=["level"])
 
@@ -237,12 +234,5 @@ def save(class_list) -> None:
             file.write(class_data + "\n")
 
 
-def common_check(student, user, classes):
-    common_classes = []
-    for i in student["classes"]:
-        for j in user["classes"]:
-            if i == j:
-                for h in classes:
-                    if h["name"] == i:
-                        common_classes.append(h["name"])
-    return common_classes
+def common_check(student, user):
+    return list(set(student["subjects"]) & set(user["classes"]))
