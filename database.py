@@ -193,3 +193,7 @@ def get_user_by_email(own_user: dict, email: str, role: Optional[str] = None):
         ):
             raise ValueError("You don't have access to get this user")
     return user
+
+
+def get_users_by_role(role: str):
+    return [user for user in users if user["role"] == role]
