@@ -5,6 +5,13 @@ from utils import logout
 
 
 def yes_or_no(saying="Do you want to finish? y/n\n"):
+    """The function asks user a question, that when is being responded
+        with y/n returns TRUE or FALSE respectively
+    Args:
+        saying(str): question that user is supposed to answer
+    Returns:
+        choice: TRUE or FALSE, depending on if the answer is y or n
+    """
     while True:
         choice = input(saying)
         if choice == "y" or choice == "n":
@@ -15,8 +22,33 @@ def yes_or_no(saying="Do you want to finish? y/n\n"):
 
 
 def show_available_classes(user, class_info):
-    index = 1
-    available_class_position = 0
+    """The function prints classes that are available to a user
+        Example of printed classes:
+         1. name_of_the_class1
+         2. name_of_the_class2
+         3. name_of_the_class3
+       and returns them in a list.
+        Example of the function returned output
+         [
+         {
+            position:value1,
+            index:value2,
+            key3:value3,
+            key4:value4
+         }
+         ]
+    Args:
+        user: user whose class availability is checked
+        class_info: list of all classes
+    Returns:
+        available_classes: list of available to the user classes
+    """
+    index = (
+        1  # index is a convenient number by which user can address the class
+    )
+    available_class_position = (
+        0  # position indicates position of a class in a class_info list
+    )
     available_classes = []
     for class_interator in class_info:
         if class_interator["name"] in user["classes"]:
@@ -35,8 +67,18 @@ def show_available_classes(user, class_info):
 
 
 def merge_classes(available_classes, class_info):
+    """The function merges a modified fragment of the list of classes
+       to the list of classes itself, updating class details
+    Args:
+        available_classes: modified list of classes available to user
+        class_info: list of all classes
+    Returns:
+        class_info: updated list of all classes
+    """
     for available_class in available_classes:
-        available_class_position = available_class.get("position")
+        available_class_position = available_class.get(
+            "position"
+        )  # variable that remembers position of a class
         available_class.pop("index")
         available_class.pop("position")
         class_info[available_class_position] = available_class
@@ -45,6 +87,9 @@ def merge_classes(available_classes, class_info):
 
 
 def save(class_list) -> None:
+    """The function saves the list of classes to the text file in the
+    database, by overwriting the information in the text file
+    """
     with open("database/classes.txt", "w") as file:
         for line in class_list:
             class_data = ""
@@ -57,10 +102,16 @@ def save(class_list) -> None:
                         .strip("]")
                         .replace("'", "")
                     )
-                if key == list(line.keys())[-1]:
-                    class_data += f"{key}:{value}"
+                if (
+                    key == list(line.keys())[-1]
+                ):  # check if the key is last in the dictionary
+                    class_data += (
+                        f"{key}:{value}"  # if so, ";" must not be placed
+                    )
                 else:
-                    class_data += f"{key}:{value};"
+                    class_data += (
+                        f"{key}:{value};"  # otherwise, ";" must be placed
+                    )
             file.write(class_data + "\n")
 
 
@@ -78,7 +129,9 @@ def tutor_menu(user):
         ]
         print("\n".join(menu))
         class_info = parse_txt("database/classes.txt")
-        users = parse_txt("database/users.txt")
+        users = parse_txt(
+            "database/users.txt"
+        )  # this parse_txt function imported from database.py
         choice = int(input())
 
         if choice == 1:
@@ -95,13 +148,19 @@ def tutor_menu(user):
             while True:
                 available_classes = show_available_classes(user, class_info)
                 choice = int(
-                    input("What class would you like to add information to\n")
+                    input(
+                        "What class would you like to add information to\n"
+                        " (write 0 if you want to quit)\n"
+                    )
                 )
+                if choice > available_classes[-1]["index"]:
+                    raise Exception("Invalid choice. Try again")
                 for class_iterator in available_classes:
                     if class_iterator.get("index") == choice:
                         while True:
                             key = input(
-                                "What type of info do you want to add?\n"
+                                "What type of information"
+                                " do you want to add?\n"
                             )
                             if class_info[class_iterator.get("position")].get(
                                 key
@@ -135,8 +194,11 @@ def tutor_menu(user):
                         input(
                             "What class would you like"
                             " to change information of\n"
+                            " (write 0 if you want to quit)\n"
                         )
                     )
+                    if choice > available_classes[-1]["index"]:
+                        raise Exception("Invalid choice. Try again")
                     for available_class in available_classes:
                         if available_class.get("index") == choice:
                             print(
@@ -182,6 +244,8 @@ def tutor_menu(user):
                             " (write 0 if you want to quit)\n"
                         )
                     )
+                    if choice > available_classes[-1]["index"]:
+                        raise Exception("Invalid choice. Try again")
                     for available_class in available_classes:
                         if available_class.get("index") == choice:
                             print(
@@ -229,18 +293,21 @@ def tutor_menu(user):
                 if user_iterator["role"] == "Student":
                     if list(
                         set(user_iterator["subjects"]) & set(user["classes"])
-                    ):
+                    ):  # Check if the list of student subjects
+                        # and list of tutor classes intersect
                         print(
                             user_iterator["nickname"],
                             " ",
                             list(
                                 set(user_iterator["subjects"])
                                 & set(user["classes"])
-                            ),
+                            ),  # Printing an intersections into the console
                         )
 
         elif choice == 5:
-            update_profile(user, menu_extension=["level"])
+            update_profile(
+                user, menu_extension=["level"]
+            )  # Function update_profile is imported from database.py
 
         elif choice == 6:
             new_class = {}
@@ -254,12 +321,17 @@ def tutor_menu(user):
             new_class["start"] = str(input()).replace(" ", "")
             print("At what time does this class end?(E.g. 16.00)")
             new_class["end"] = str(input()).replace(" ", "")
-            if class_info[-1]:
+            if class_info[
+                -1
+            ]:  # Check if it`s the first class to be created in the file
                 new_class["id"] = int(class_info[-1]["id"]) + 1
             else:
                 new_class["id"] = 1
             class_info.append(new_class)
-            for user_iterator in users:
+            for (
+                user_iterator
+            ) in users:  # Function that adds the name of a class
+                # to tutor that created it
                 if user_iterator["email"] == user["email"]:
                     user_iterator["classes"].append(str(new_class["name"]))
                     user = user_iterator
@@ -270,7 +342,14 @@ def tutor_menu(user):
 
         elif choice == 7:
             available_classes = show_available_classes(user, class_info)
-            choice = int(input("What class would you like to delete\n"))
+            choice = int(
+                input(
+                    "What class would you like to delete?\n"
+                    " (write 0 if you want to quit)\n"
+                )
+            )
+            if choice > available_classes[-1]["index"]:
+                raise Exception("Invalid choice. Try again")
             for available_class in available_classes:
                 if available_class.get("index") == choice:
                     if not yes_or_no(
@@ -279,7 +358,10 @@ def tutor_menu(user):
                         " y/n\n"
                     ):
                         break
-                    for user_iterator in users:
+                    for (
+                        user_iterator
+                    ) in users:  # Function that removes the name of a class
+                        # from tutor that teaches it
                         if user_iterator["email"] == user["email"]:
                             user_iterator["classes"].remove(
                                 available_class["name"]
@@ -293,7 +375,7 @@ def tutor_menu(user):
                     break
 
         elif choice == 8:
-            logout(user)
+            logout(user)  # This function is imported from utils.py
             return None
 
         else:
