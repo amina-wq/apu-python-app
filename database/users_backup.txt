@@ -8,4 +8,4 @@ nickname:aa;password:3691308f2a4c2f6983f2880d32e29c84;email:dd;role:Tutor;classe
 nickname:dd;password:633de4b0c14ca52ea2432a3c8a5c4c31;email:gg;role:Tutor;classes:hh;salary:jj
 nickname:ee;password:08a4415e9d594ff960030b921d42b91e;email:ee;role:Tutor;classes:ee;salary:ee
 nickname:ee;password:633de4b0c14ca52ea2432a3c8a5c4c31;email:rr;role:Tutor;classes:aa;salary:vv
-nickname:33;password:08a4415e9d594ff960030b921d42b91e;email:ff;role:Tutor;classes:english, python;salary:gg
+nickname:33;password:08a4415e9d594ff960030b921d42b91e;email:ff;role:Tutor;classes:;salary:gg

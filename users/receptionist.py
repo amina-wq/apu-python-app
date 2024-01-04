@@ -160,23 +160,25 @@ def accept_payment(email):
 
 
 def receptionist_menu(user):
+    """Receptionist menu"""
+    menu = [
+        "1. Manage Student",
+        "2. Update profile",
+        "3. Logout",
+    ]
+
     while True:
-        menu = [
-            "1. Manage Student",
-            "2. Update profile",
-            "3. Logout",
-        ]
         print("\n".join(menu))
         choice = input("Enter your choice: ")
-
-        if choice == "1":
-            manage_student(user)
-        elif choice == "2":
-            try:
+        try:
+            if choice == "1":
+                manage_student(user)
+            elif choice == "2":
                 update_profile(user)
-            except Exception:
-                continue
-        elif choice == "3":
-            return logout(user)
-        else:
-            raise Exception("Invalid choice. Try again")
+            elif choice == "3":
+                return logout(user)
+            else:
+                raise Exception("Invalid choice. Try again")
+        except Exception:
+            print("Something went wrong, please try again")
+            continue

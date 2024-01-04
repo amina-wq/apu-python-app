@@ -134,7 +134,7 @@ def tutor_menu(user):
             if common_classes := common_check(student, user):
                 print(f'{student["nickname"]}: {", ".join(common_classes)}')
     elif choice == 5:
-        update_profile(user, menu_extension=["level"])
+        update_profile(user, menu_extension=["classes"])
 
     elif choice == 6:
         new_class = {}

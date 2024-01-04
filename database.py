@@ -1,3 +1,4 @@
+from shutil import copyfile
 from typing import Optional, List, Dict, Any
 from hashlib import md5
 
@@ -50,16 +51,23 @@ def save_users() -> None:
     """The function overwrites the contents of the file
     after changes are made to the user list
     """
-    with open("database/users.txt", "w") as file:
-        for user in users:
-            user_data = ""
-            for key, value in user.items():
-                postfix = "" if key == list(user.keys())[-1] else ";"
-                if isinstance(value, list):
-                    user_data += f"{key}:{','.join(value)}" + postfix
-                else:
-                    user_data += f"{key}:{value}" + postfix
-            file.write(user_data + "\n")
+    global users
+    copyfile("./database/users.txt", "./database/users_backup.txt")
+    try:
+        with open("database/users.txt", "w") as file:
+            for user in users:
+                user_data = ""
+                for key, value in user.items():
+                    postfix = "" if key == list(user.keys())[-1] else ";"
+                    if isinstance(value, list):
+                        user_data += f"{key}:{','.join(value)}" + postfix
+                    else:
+                        user_data += f"{key}:{value}" + postfix
+                file.write(user_data + "\n")
+    except Exception:
+        copyfile("./database/users_backup.txt", "./database/users.txt")
+        users = parse_txt("./database/users.txt")
+        print("An error occurred. The database backup was restored.")
 
 
 def register_user(
