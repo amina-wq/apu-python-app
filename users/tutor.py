@@ -124,17 +124,18 @@ def tutor_menu(user):
     Returns:
         None
     """
+    menu = [
+        "1. Show your classes",
+        "2. Add class info",
+        "3. Update/delete class info",
+        "4. View students enrolled in your classes",
+        "5. Update profile",
+        "6. Create a new class",
+        "7. Delete a class",
+        "8. Logout",
+    ]
+
     while True:
-        menu = [
-            "1. Show your classes",
-            "2. Add class info",
-            "3. Update/delete class info",
-            "4. View students enrolled in your classes",
-            "5. Update profile",
-            "6. Create a new class",
-            "7. Delete a class",
-            "8. Logout",
-        ]
         print("\n".join(menu))
         class_info = parse_txt("database/classes.txt")
         users = parse_txt(
@@ -143,249 +144,269 @@ def tutor_menu(user):
         print("\nEnter your choice\n")
         choice = int(input())
 
-        if choice == 1:
-            available_classes = show_available_classes(user, class_info)
-            print("\n")
-            if yes_or_no("Do you want to see details of your classes? y/n\n"):
-                for available_class in available_classes:
-                    available_class.pop("index")
-                    available_class.pop("position")
-                    print(available_class)
-            print("\n")
+        try:
+            if choice == 1:
+                available_classes = show_available_classes(user, class_info)
+                print("\n")
+                if yes_or_no(
+                    "Do you want to see details of your classes? y/n\n"
+                ):
+                    for available_class in available_classes:
+                        available_class.pop("index")
+                        available_class.pop("position")
+                        print(available_class)
+                print("\n")
 
-        elif choice == 2:
-            while True:
+            elif choice == 2:
+                while True:
+                    available_classes = show_available_classes(
+                        user, class_info
+                    )
+                    choice = int(
+                        input(
+                            "What class would you like to add information to\n"
+                            " (write 0 if you want to quit)\n"
+                        )
+                    )
+                    if choice > available_classes[-1]["index"]:
+                        raise Exception("Invalid choice. Try again")
+                    for class_iterator in available_classes:
+                        if class_iterator.get("index") == choice:
+                            while True:
+                                key = input(
+                                    "What type of information"
+                                    " do you want to add?\n"
+                                )
+                                if class_info[
+                                    class_iterator.get("position")
+                                ].get(key):
+                                    print("This information already exists")
+                                    continue
+                                value = str(
+                                    input(
+                                        "What information"
+                                        " do you want to add?\n"
+                                    )
+                                ).replace(" ", "")
+                                class_iterator[key] = value
+                                break
+                    merge_classes(available_classes, class_info)
+                    if yes_or_no():
+                        break
+
+            elif choice == 3:
+                choice = int(
+                    input(
+                        "Do you want to update(1)"
+                        " or delete(2) class information?\n"
+                        " To cancel this action type any other symbol\n"
+                    )
+                )
+
+                if choice == 1:
+                    while True:
+                        available_classes = show_available_classes(
+                            user, class_info
+                        )
+                        choice = int(
+                            input(
+                                "What class would you like"
+                                " to change information of\n"
+                                " (write 0 if you want to quit)\n"
+                            )
+                        )
+                        if choice > available_classes[-1]["index"]:
+                            raise Exception("Invalid choice. Try again")
+                        for available_class in available_classes:
+                            if available_class.get("index") == choice:
+                                print(
+                                    "Information of this class"
+                                    " before the changes:\n",
+                                    class_info[available_class["position"]],
+                                )
+                                while True:
+                                    key = input(
+                                        "What type of info do you want"
+                                        " to change?\n"
+                                    )
+                                    if (
+                                        class_info[
+                                            available_class.get("position")
+                                        ].get(key)
+                                        is None
+                                    ):
+                                        print(
+                                            "This information doesn`t exists"
+                                        )
+                                        continue
+                                    value = str(
+                                        input(
+                                            "What information do you want to"
+                                            " take its place?\n"
+                                        )
+                                    ).replace(" ", "")
+                                    available_class[key] = value
+                                    break
+                        merge_classes(available_classes, class_info)
+                        if yes_or_no():
+                            break
+
+                elif choice == 2:
+                    while True:
+                        print("What information do you want to delete?")
+                        available_classes = show_available_classes(
+                            user, class_info
+                        )
+                        choice = int(
+                            input(
+                                "What class would you like"
+                                " to delete information of\n"
+                                " (write 0 if you want to quit)\n"
+                            )
+                        )
+                        if choice > available_classes[-1]["index"]:
+                            raise Exception("Invalid choice. Try again")
+                        for available_class in available_classes:
+                            if available_class.get("index") == choice:
+                                print(
+                                    "Information of this class"
+                                    " before the changes:\n",
+                                    class_info[available_class["position"]],
+                                )
+                                while True:
+                                    key = input(
+                                        "What type of info do you want"
+                                        " to delete?\n"
+                                    )
+                                    if not yes_or_no(
+                                        "Are you sure you want to"
+                                        " proceed with the deletion?"
+                                        " y/n\n"
+                                    ):
+                                        break
+                                    if (
+                                        class_info[
+                                            available_class.get("position")
+                                        ].get(key)
+                                        is None
+                                    ):
+                                        print(
+                                            "This information doesn`t exists"
+                                        )
+                                        break
+                                    if key in [
+                                        "name",
+                                        "start",
+                                        "end",
+                                        "dates",
+                                        "charge",
+                                        "level",
+                                    ]:
+                                        available_class[key] = None
+                                    else:
+                                        del available_class[key]
+                                    break
+                        merge_classes(available_classes, class_info)
+                        if yes_or_no():
+                            break
+
+            elif choice == 4:
+                for user_iterator in users:
+                    if user_iterator["role"] == "Student":
+                        if list(
+                            set(user_iterator["subjects"])
+                            & set(user["classes"])
+                        ):  # Check if the list of student subjects
+                            # and list of tutor classes intersect
+                            print(
+                                user_iterator["nickname"],
+                                " ",
+                                list(
+                                    set(user_iterator["subjects"])
+                                    & set(user["classes"])
+                                ),
+                                # Printing an intersections into the console
+                            )
+
+            elif choice == 5:
+                update_profile(
+                    user
+                )  # Function update_profile is imported from database.py
+
+            elif choice == 6:
+                new_class = {}
+                print("What`s the name of this class?")
+                new_class["name"] = str(input()).replace(" ", "")
+                print("What`s the monthly for this class")
+                new_class["charge"] = str(input()).replace(" ", "")
+                print("What`re the week days of this class(E.g. mon,tue,fri)")
+                new_class["dates"] = str(input()).replace(" ", "").split(",")
+                print("At what time does this class start?(E.g. 14.00)")
+                new_class["start"] = str(input()).replace(" ", "")
+                print("At what time does this class end?(E.g. 16.00)")
+                new_class["end"] = str(input()).replace(" ", "")
+                if class_info[
+                    -1
+                ]:  # Check if it`s the first class to be created in the file
+                    new_class["id"] = int(class_info[-1]["id"]) + 1
+                else:
+                    new_class["id"] = 1
+                class_info.append(new_class)
+                for (
+                    user_iterator
+                ) in users:  # Function that adds the name of a class
+                    # to tutor that created it
+                    if user_iterator["email"] == user["email"]:
+                        user_iterator["classes"].append(str(new_class["name"]))
+                        user = user_iterator
+                        break
+                database.users = users
+                database.save_users()
+                save(class_info)
+
+            elif choice == 7:
                 available_classes = show_available_classes(user, class_info)
                 choice = int(
                     input(
-                        "What class would you like to add information to\n"
+                        "What class would you like to delete?\n"
                         " (write 0 if you want to quit)\n"
                     )
                 )
                 if choice > available_classes[-1]["index"]:
                     raise Exception("Invalid choice. Try again")
-                for class_iterator in available_classes:
-                    if class_iterator.get("index") == choice:
-                        while True:
-                            key = input(
-                                "What type of information"
-                                " do you want to add?\n"
-                            )
-                            if class_info[class_iterator.get("position")].get(
-                                key
-                            ):
-                                print("This information already exists")
-                                continue
-                            value = str(
-                                input("What information do you want to add?\n")
-                            ).replace(" ", "")
-                            class_iterator[key] = value
+                for available_class in available_classes:
+                    if available_class.get("index") == choice:
+                        if not yes_or_no(
+                            "Are you sure you want to"
+                            " proceed with the deletion?"
+                            " y/n\n"
+                        ):
                             break
-                merge_classes(available_classes, class_info)
-                if yes_or_no():
-                    break
-
-        elif choice == 3:
-            choice = int(
-                input(
-                    "Do you want to update(1)"
-                    " or delete(2) class information?\n"
-                    " To cancel this action type any other symbol\n"
-                )
-            )
-
-            if choice == 1:
-                while True:
-                    available_classes = show_available_classes(
-                        user, class_info
-                    )
-                    choice = int(
-                        input(
-                            "What class would you like"
-                            " to change information of\n"
-                            " (write 0 if you want to quit)\n"
-                        )
-                    )
-                    if choice > available_classes[-1]["index"]:
-                        raise Exception("Invalid choice. Try again")
-                    for available_class in available_classes:
-                        if available_class.get("index") == choice:
-                            print(
-                                "Information of this class"
-                                " before the changes:\n",
-                                class_info[available_class["position"]],
-                            )
-                            while True:
-                                key = input(
-                                    "What type of info do you want"
-                                    " to change?\n"
+                        for (
+                            user_iterator
+                        ) in (
+                            users
+                        ):  # Function that removes the name of a class
+                            # from tutor that teaches it
+                            if user_iterator["email"] == user["email"]:
+                                user_iterator["classes"].remove(
+                                    available_class["name"]
                                 )
-                                if (
-                                    class_info[
-                                        available_class.get("position")
-                                    ].get(key)
-                                    is None
-                                ):
-                                    print("This information doesn`t exists")
-                                    continue
-                                value = str(
-                                    input(
-                                        "What information do you want to"
-                                        " take its place?\n"
-                                    )
-                                ).replace(" ", "")
-                                available_class[key] = value
+                                user = user_iterator
                                 break
-                    merge_classes(available_classes, class_info)
-                    if yes_or_no():
+                        del class_info[available_class["position"]]
+                        database.users = users
+                        database.save_users()
+                        save(class_info)
                         break
 
-            elif choice == 2:
-                while True:
-                    print("What information do you want to delete?")
-                    available_classes = show_available_classes(
-                        user, class_info
-                    )
-                    choice = int(
-                        input(
-                            "What class would you like"
-                            " to delete information of\n"
-                            " (write 0 if you want to quit)\n"
-                        )
-                    )
-                    if choice > available_classes[-1]["index"]:
-                        raise Exception("Invalid choice. Try again")
-                    for available_class in available_classes:
-                        if available_class.get("index") == choice:
-                            print(
-                                "Information of this class"
-                                " before the changes:\n",
-                                class_info[available_class["position"]],
-                            )
-                            while True:
-                                key = input(
-                                    "What type of info do you want"
-                                    " to delete?\n"
-                                )
-                                if not yes_or_no(
-                                    "Are you sure you want to"
-                                    " proceed with the deletion?"
-                                    " y/n\n"
-                                ):
-                                    break
-                                if (
-                                    class_info[
-                                        available_class.get("position")
-                                    ].get(key)
-                                    is None
-                                ):
-                                    print("This information doesn`t exists")
-                                    break
-                                if key in [
-                                    "name",
-                                    "start",
-                                    "end",
-                                    "dates",
-                                    "charge",
-                                    "level",
-                                ]:
-                                    available_class[key] = None
-                                else:
-                                    del available_class[key]
-                                break
-                    merge_classes(available_classes, class_info)
-                    if yes_or_no():
-                        break
+            elif choice == 8:
+                logout(user)  # This function is imported from utils.py
+                return None
 
-        elif choice == 4:
-            for user_iterator in users:
-                if user_iterator["role"] == "Student":
-                    if list(
-                        set(user_iterator["subjects"]) & set(user["classes"])
-                    ):  # Check if the list of student subjects
-                        # and list of tutor classes intersect
-                        print(
-                            user_iterator["nickname"],
-                            " ",
-                            list(
-                                set(user_iterator["subjects"])
-                                & set(user["classes"])
-                            ),  # Printing an intersections into the console
-                        )
-
-        elif choice == 5:
-            update_profile(
-                user, menu_extension=["level"]
-            )  # Function update_profile is imported from database.py
-
-        elif choice == 6:
-            new_class = {}
-            print("What`s the name of this class?")
-            new_class["name"] = str(input()).replace(" ", "")
-            print("What`s the monthly for this class")
-            new_class["charge"] = str(input()).replace(" ", "")
-            print("What`re the week days of this class(E.g. mon,tue,fri)")
-            new_class["dates"] = str(input()).replace(" ", "").split(",")
-            print("At what time does this class start?(E.g. 14.00)")
-            new_class["start"] = str(input()).replace(" ", "")
-            print("At what time does this class end?(E.g. 16.00)")
-            new_class["end"] = str(input()).replace(" ", "")
-            if class_info[
-                -1
-            ]:  # Check if it`s the first class to be created in the file
-                new_class["id"] = int(class_info[-1]["id"]) + 1
             else:
-                new_class["id"] = 1
-            class_info.append(new_class)
-            for (
-                user_iterator
-            ) in users:  # Function that adds the name of a class
-                # to tutor that created it
-                if user_iterator["email"] == user["email"]:
-                    user_iterator["classes"].append(str(new_class["name"]))
-                    user = user_iterator
-                    break
-            database.users = users
-            database.save_users()
-            save(class_info)
+                raise ValueError("Invalid choice. Try again")
 
-        elif choice == 7:
-            available_classes = show_available_classes(user, class_info)
-            choice = int(
-                input(
-                    "What class would you like to delete?\n"
-                    " (write 0 if you want to quit)\n"
-                )
-            )
-            if choice > available_classes[-1]["index"]:
-                raise Exception("Invalid choice. Try again")
-            for available_class in available_classes:
-                if available_class.get("index") == choice:
-                    if not yes_or_no(
-                        "Are you sure you want to"
-                        " proceed with the deletion?"
-                        " y/n\n"
-                    ):
-                        break
-                    for (
-                        user_iterator
-                    ) in users:  # Function that removes the name of a class
-                        # from tutor that teaches it
-                        if user_iterator["email"] == user["email"]:
-                            user_iterator["classes"].remove(
-                                available_class["name"]
-                            )
-                            user = user_iterator
-                            break
-                    del class_info[available_class["position"]]
-                    database.users = users
-                    database.save_users()
-                    save(class_info)
-                    break
-
-        elif choice == 8:
-            logout(user)  # This function is imported from utils.py
-            return None
-
-        else:
-            raise Exception("Invalid choice. Try again")
+        except Exception:
+            print("Something went wrong, please try again")
+            continue
