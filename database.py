@@ -99,6 +99,7 @@ def register_user(
         "email": email,
         "role": role,
     }
+    print("User was registered successfully")
     user.update(kwargs)
     users.append(user)
     save_users()
@@ -115,6 +116,9 @@ def delete_user(own_user: dict, email: str) -> None:
                 raise ValueError("You can not delete this user")
             users.remove(user)
             break
+        else:
+            print("The user with this email doesn't exist")
+            continue
     save_users()
 
 

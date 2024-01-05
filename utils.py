@@ -45,6 +45,7 @@ def show_menu(user):
 
     role = user.get("role")
 
+    print("Menu:")
     if role == ADMIN:
         admin_menu(user)
     elif role == RECEPTIONIST:

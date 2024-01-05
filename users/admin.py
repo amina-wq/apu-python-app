@@ -10,27 +10,34 @@ def manage_receptionists(user):
         "2. Delete Receptionist",
         "3. Main menu",
     ]
-    print("\n".join(menu))
-    choice = input("Enter your choice: ")
-    if choice == "1":
-        name = input("Enter employees name: ")
-        password = input("Set employees password: ")
-        email = input("Enter employees email: ")
-        salary = input("Enter employees salary: ")
-        register_user(
-            name,
-            password,
-            email,
-            RECEPTIONIST,
-            salary=salary,
-        )
-    elif choice == "2":
-        email = input("Enter the employees email: ")
-        delete_user(user, email)
-    elif choice == "3":
-        return
-    else:
-        raise Exception("Invalid choice. Try again")
+
+    while True:
+        print("\n".join(menu))
+        choice = input("Enter your choice: ")
+
+        try:
+            if choice == "1":
+                name = input("Enter employees name: ")
+                password = input("Set employees password: ")
+                email = input("Enter employees email: ")
+                salary = input("Enter employees salary: ")
+                register_user(
+                    name,
+                    password,
+                    email,
+                    RECEPTIONIST,
+                    salary=salary,
+                )
+            elif choice == "2":
+                email = input("Enter the employees email: ")
+                delete_user(user, email)
+            elif choice == "3":
+                return
+            else:
+                raise Exception("Invalid choice. Try again")
+        except Exception:
+            print("Something went wrong, please try again")
+            continue
 
 
 def manage_tutor(user):
@@ -40,33 +47,45 @@ def manage_tutor(user):
         "2. Delete Tutor",
         "3. Main menu",
     ]
-    print("\n".join(menu))
-    choice = input("Enter your choice: ")
-    if choice == "1":
-        name = input("Enter employees name: ")
-        password = input("Set employees password: ")
-        email = input("Enter employees email: ")
-        salary = input("Enter employees salary: ")
-        register_user(
-            name,
-            password,
-            email,
-            TUTOR,
-            classes="",
-            salary=salary,
-        )
-    elif choice == "2":
-        email = input("Enter the employees email: ")
-        delete_user(user, email)
-    elif choice == "3":
-        return
-    else:
-        raise ValueError("Invalid choice. Try again")
+
+    while True:
+        print("\n".join(menu))
+        choice = input("Enter your choice: ")
+
+        try:
+            if choice == "1":
+                name = input("Enter employees name: ")
+                password = input("Set employees password: ")
+                email = input("Enter employees email: ")
+                salary = input("Enter employees salary: ")
+                register_user(
+                    name,
+                    password,
+                    email,
+                    TUTOR,
+                    classes="",
+                    salary=salary,
+                )
+            elif choice == "2":
+                email = input("Enter the employees email: ")
+                delete_user(user, email)
+            elif choice == "3":
+                return
+            else:
+                raise ValueError("Invalid choice. Try again")
+        except Exception:
+            print("Something went wrong, please try again")
+            continue
 
 
 def view_monthly_income():
     """Monthly income calculation"""
     income = 0
+
+    header = "Name            | Role      | Monthly Fee/Salary | Status"
+    print(header)
+    print("-" * len(header))
+
     for user in users:
         if user["role"] == STUDENT:
             if user["payment_status"]:
@@ -75,18 +94,19 @@ def view_monthly_income():
             else:
                 status = "Pending"
             print(
-                f"Name: {user['nickname']}, "
-                f"Role: {user['role']}, "
-                f"Fee: {user['monthly_fee']}, "
-                f"Status: {status}"
+                f"{user['nickname']:<15} "
+                f"| {user['role']:<9} "
+                f"| {user['monthly_fee']:<18} | {status}"
             )
         else:
             income -= int(user["salary"])
             print(
-                f"Name: {user['nickname']}, "
-                f"Role: {user['role']}, "
-                f"Salary: {user['salary']} "
+                f"{user['nickname']:<15} "
+                f"| {user['role']:<9} |"
+                f" {user['salary']:<18} | N/A"
             )
+
+    print("-" * len(header))
     print(f"Monthly income: {income}")
     input("Press 'Enter' key to continue...")
 

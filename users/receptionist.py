@@ -21,79 +21,86 @@ def manage_student(user):
         "5. Accept Payment",
         "6. Main menu",
     ]
-    print("\n".join(menu))
-    choice = input("Enter your choice: ")
-    if choice == "1":
-        name = input("Enter Name: ")
-        email = input("Enter Email: ")
-        password = input("Enter password: ")
-        nationality = input("Enter Nationality: ")
-        passport = input("Enter Passport No/IC: ")
-        contact_number = input("Enter Contact No: ")
-        address = input("Enter Address: ")
-        guardian_name = input("Enter Guardian Name: ")
-        guardian_contact = input("Enter Guardian Contact No: ")
-        level = input("Enter Level: ")
-        intake = input("Enter Intake Month/Year: ")
-        subjects = input(
-            "Enter subjects(separated by comma, up to 3): "
-        ).split(",")
 
-        fees = 0
-        for _class in classes:
-            if _class["name"] in subjects:
-                fees += int(_class.get("charge", 0))
+    while True:
+        print("\n".join(menu))
+        choice = input("Enter your choice: ")
 
-        register_user(
-            name,
-            password,
-            email,
-            STUDENT,
-            nationality=nationality,
-            passport_no=passport,
-            contact_number=contact_number,
-            address=address,
-            guardian_name=guardian_name,
-            guardian_contact=guardian_contact,
-            level=level,
-            intake=intake,
-            subjects=subjects,
-            monthly_fee=fees,
-            payment_status=False,
-            completed_studies=False,
-        )
-        print("The user registered successfully")
-    elif choice == "2":
-        student_email = input("Enter student email: ")
-        update_profile(
-            user,
-            [
-                "nationality",
-                "passport_no",
-                "contact_number",
-                "address",
-                "guardian_name",
-                "guardian_contact",
-                "level",
-                "intake",
-                "subjects",
-                "monthly_fee",
-                "completed_studies",
-            ],
-            student_email,
-        )
-    elif choice == "3":
-        student_email = input("Enter student email: ")
-        update_student_enrollment(user, student_email)
-    elif choice == "4":
-        email = input("Enter the e-mail of the student: ")
-        delete_user(user, email)
-        print("Student record has been deleted!")
-    elif choice == "5":
-        email = input("Enter the e-mail of the student: ")
-        accept_payment(email)
-    elif choice == "6":
-        return
+        try:
+            if choice == "1":
+                name = input("Enter Name: ")
+                email = input("Enter Email: ")
+                password = input("Enter password: ")
+                nationality = input("Enter Nationality: ")
+                passport = input("Enter Passport No/IC: ")
+                contact_number = input("Enter Contact No: ")
+                address = input("Enter Address: ")
+                guardian_name = input("Enter Guardian Name: ")
+                guardian_contact = input("Enter Guardian Contact No: ")
+                level = input("Enter Level: ")
+                intake = input("Enter Intake Month/Year: ")
+                subjects = input(
+                    "Enter subjects(separated by comma, up to 3): "
+                ).split(",")
+
+                fees = 0
+                for _class in classes:
+                    if _class["name"] in subjects:
+                        fees += int(_class.get("charge", 0))
+
+                register_user(
+                    name,
+                    password,
+                    email,
+                    STUDENT,
+                    nationality=nationality,
+                    passport_no=passport,
+                    contact_number=contact_number,
+                    address=address,
+                    guardian_name=guardian_name,
+                    guardian_contact=guardian_contact,
+                    level=level,
+                    intake=intake,
+                    subjects=subjects,
+                    monthly_fee=fees,
+                    payment_status=False,
+                    completed_studies=False,
+                )
+                print("The user registered successfully")
+            elif choice == "2":
+                student_email = input("Enter student email: ")
+                update_profile(
+                    user,
+                    [
+                        "nationality",
+                        "passport_no",
+                        "contact_number",
+                        "address",
+                        "guardian_name",
+                        "guardian_contact",
+                        "level",
+                        "intake",
+                        "subjects",
+                        "monthly_fee",
+                        "completed_studies",
+                    ],
+                    student_email,
+                )
+            elif choice == "3":
+                student_email = input("Enter student email: ")
+                update_student_enrollment(user, student_email)
+            elif choice == "4":
+                email = input("Enter the e-mail of the student: ")
+                delete_user(user, email)
+                print("Student record has been deleted!")
+            elif choice == "5":
+                email = input("Enter the e-mail of the student: ")
+                accept_payment(email)
+            elif choice == "6":
+                return
+        except Exception:
+            print("Something went wrong, please try again")
+            continue
 
 
 def update_student_enrollment(user, email):
