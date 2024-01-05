@@ -116,12 +116,20 @@ def save(class_list) -> None:
 
 
 def tutor_menu(user):
+    """The main function of the tutor functionality. It displays to
+    users Tutor menu and gives them access to Tutor functionality.
+    Args:
+        user: The user for whom the tutor menu is displayed.
+
+    Returns:
+        None
+    """
     while True:
         menu = [
             "1. Show your classes",
             "2. Add class info",
             "3. Update/delete class info",
-            "4. View students enrolled on your classes",
+            "4. View students enrolled in your classes",
             "5. Update profile",
             "6. Create a new class",
             "7. Delete a class",
@@ -132,6 +140,7 @@ def tutor_menu(user):
         users = parse_txt(
             "database/users.txt"
         )  # this parse_txt function imported from database.py
+        print("\nEnter your choice\n")
         choice = int(input())
 
         if choice == 1:
