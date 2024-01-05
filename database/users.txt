@@ -1,11 +1,6 @@
 nickname:admin;password:c93ccd78b2076528346216b3b2f701e6;email:admin@gmail.com;role:Admin;salary:5000
-nickname:ruru;password:6aaadd6b73ca30c20ceb4ad007547f5f;email:ruru;role:Receptionist;salary:3000
-nickname:tutu;password:bdb8c008fa551ba75f8481963f2201da;email:tutu;role:Tutor;classes:c++,c#,java;salary:4000
-nickname:susu;password:57ee1345597f3bb1d50054c299cca0f7;email:susu;role:Student;nationality:susu;passport_no:susu;contact_number:susu;address:susu;guardian_name:susu;guardian_contact:susu;level:1;intake:1;subjects:c++,python;monthly_fee:1050;payment_status:True;completed_studies:True
-nickname:susu1;password:33dbb5f44f629f78596390c2fa900afc;email:susu1;role:Student;nationality:susu1;passport_no:susu1;contact_number:susu1;address:susu1;guardian_name:susu1;guardian_contact:susu1;level:1;intake:1;subjects:c++,c#;monthly_fee:1200;payment_status:False;completed_studies:False
-nickname:rcc;password:b66ef205d4bba3390bc51642b3f397d2;email:ffff;role:Tutor;classes:ff, ff, ff;salary:67698
-nickname:aa;password:3691308f2a4c2f6983f2880d32e29c84;email:dd;role:Tutor;classes:ff;salary:6789
-nickname:dd;password:633de4b0c14ca52ea2432a3c8a5c4c31;email:gg;role:Tutor;classes:hh;salary:jj
-nickname:ee;password:08a4415e9d594ff960030b921d42b91e;email:ee;role:Tutor;classes:ee;salary:ee
-nickname:ee;password:633de4b0c14ca52ea2432a3c8a5c4c31;email:rr;role:Tutor;classes:aa;salary:vv
-nickname:33;password:08a4415e9d594ff960030b921d42b91e;email:ff;role:Tutor;classes:english, python;salary:gg
+nickname:rt;password:accc9105df5383111407fd5b41255e23;email:tt;role:Tutor;classes:;salary:1222
+nickname:jake;password:1200cf8ad328a60559cf5e7c5f46ee6d;email:jake@gmail.com;role:Receptionist;salary:5000
+nickname:sasa;password:f45731e3d39a1b2330bbf93e9b3de59e;email:sasa@gmail.com;role:Student;nationality:kazakh;passport_no:1232412;contact_number:415335345;address:345fgs352;guardian_name:12wfdas;guardian_contact:efws234234;level:2;intake:07/2003;subjects:maths,english,physics;monthly_fee:300;payment_status:True;completed_studies:False
+nickname:ri;password:08c7b0daa33b1e5e86a230c1801254c9;email:ri@g.com;role:Student;nationality:ri;passport_no:ri;contact_number:riri;address:;guardian_name:ri;guardian_contact:ri;level:ri;intake:ri;subjects:maths,english,physics;monthly_fee:300;payment_status:False;completed_studies:False
+nickname:rin;password:ba32727136b397dd8b4a7693f0172a12;email:rinrin@gmail.com;phone_number:9222938;role:Receptionist;salary:200

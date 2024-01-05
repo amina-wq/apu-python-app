@@ -70,15 +70,14 @@ def save_users() -> None:
         print("An error occurred. The database backup was restored.")
 
 
-def register_user(
-    nickname: str, password: str, email: str, role: str, **kwargs
-) -> None:
+def register_user(nickname: str, password: str, email: str, contact_number: str, role: str, **kwargs) -> None:
     """Function for registering a user and putting his/her profile into a text file
     Accepts mandatory and custom parameters.
     Args:
         nickname (str): user`s nickname
         password (str): user`s password
         email (str): user`s e-mail
+        contact_number (int): user's phone number
         role (str): any role from the list of the constants: [ADMIN, RECEPTIONIST, TUTOR, STUDENT]
         kwargs: Any other key:value parameter to put into user profile
     Examples:
@@ -90,6 +89,7 @@ def register_user(
         >>>     nickname="good_person",
         >>>     password="person51",
         >>>     email="good@gmail.com",
+        >>>     contact_number="017233899",
         >>>     role=STUDENT, # noqa
         >>> )
     """
@@ -97,10 +97,18 @@ def register_user(
         "nickname": nickname,
         "password": md5(password.encode()).hexdigest(),
         "email": email,
+        "contact_number": contact_number,
         "role": role,
     }
-    print("User was registered successfully")
+
     user.update(kwargs)
+
+    if any(";" in arg or ":" in arg for arg in user.values()):
+        print('You can\'t use ";" and ":", try again')
+        return
+
+    print("User was registered successfully")
+
     users.append(user)
     save_users()
 
@@ -109,10 +117,7 @@ def delete_user(own_user: dict, email: str) -> None:
     """Delete user by e-mail"""
     for user in users:
         if user["email"] == email:
-            if (
-                ROLES_PRIORITY_MAPPER[user["role"]]  # type: ignore
-                > ROLES_PRIORITY_MAPPER[own_user["role"]]  # type: ignore
-            ):
+            if ROLES_PRIORITY_MAPPER[user["role"]] > ROLES_PRIORITY_MAPPER[own_user["role"]]:  # type: ignore
                 raise ValueError("You can not delete this user")
             users.remove(user)
             print("User was deleted successfully")
@@ -122,18 +127,12 @@ def delete_user(own_user: dict, email: str) -> None:
     save_users()
 
 
-def update_profile(
-    own_user: Dict[str, Any | List[Any]],
-    menu_extension: Optional[list] = None,
-    email: Optional[str] = None,
-) -> None:
+def update_profile(user: Dict[str, Any | List[Any]], menu_extension: Optional[list] = None) -> None:
     """
     Updates users profile in text file
     Args:
-        own_user (dict): user that should be updated
+        user (dict): user that should be updated
         menu_extension (list): optional list of updatable parameters of user
-        email (str): if you want to update other profile information,
-            you can use email to update
     Examples:
         >>> update_profile(user)
         1. Change password
@@ -151,36 +150,31 @@ def update_profile(
         Enter your choice: 4
         Set new age: 15
     """
-    if email:
-        user = get_user_by_email(own_user, email)
-    else:
-        user = own_user
-
     if user in users:
         menu = {
-            "password": "1. Change password",
-            "email": "2. Change email",
+            "nickname": "1. Change name",
+            "password": "2. Change password",
+            "contact_number": "3. Change contact number",
         }
 
         if menu_extension:
             menu.update(
-                {
-                    extension: f"{index}. Change {extension}"
-                    for index, extension in enumerate(menu_extension, start=3)
-                }
+                {extension: f"{index}. Change {extension}" for index, extension in enumerate(menu_extension, start=4)}
             )
-
-        print("\n".join(menu.values()))
-
         while True:
+            print("\n".join(menu.values()))
             menu_choice = input("Enter your choice: ")
             if menu_choice.isdigit() and 0 < int(menu_choice) <= len(menu):
                 break
             else:
-                print("Do not use letters, try again")
+                print("Invalid input, try again")
         key = list(menu.keys())[int(menu_choice) - 1]
 
         new_value = input(f"Set new {key}: ")
+        if ";" in new_value or ":" in new_value:
+            print(f'You can\'t use ";" and ":" in {key}, try again')
+            return
+
         if key == "password":
             hashed_password = md5(new_value.encode()).hexdigest()
             user[key] = hashed_password
@@ -189,10 +183,13 @@ def update_profile(
         elif len(new_value.split(",")) > 1:
             values_list = new_value.split(",")
             user[key] = values_list
+        else:
+            user[key] = new_value
 
         save_users()
+        print(f"The {key} was updated successfully")
     else:
-        raise ValueError("Incorrect user")
+        print("Incorrect user")
 
 
 def get_user_by_email(own_user: dict, email: str, role: Optional[str] = None):
@@ -200,10 +197,7 @@ def get_user_by_email(own_user: dict, email: str, role: Optional[str] = None):
     if user:
         if role and user["role"] != role:
             return None
-        if (
-            ROLES_PRIORITY_MAPPER[user["role"]]  # type: ignore
-            > ROLES_PRIORITY_MAPPER[own_user["role"]]  # type: ignore
-        ):
+        if ROLES_PRIORITY_MAPPER[user["role"]] > ROLES_PRIORITY_MAPPER[own_user["role"]]:  # type: ignore
             raise ValueError("You don't have access to get this user")
     return user
 

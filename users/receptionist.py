@@ -39,9 +39,7 @@ def manage_student(user):
                 guardian_contact = input("Enter Guardian Contact No: ")
                 level = input("Enter Level: ")
                 intake = input("Enter Intake Month/Year: ")
-                subjects = input(
-                    "Enter subjects(separated by comma, up to 3): "
-                ).split(",")
+                subjects = input("Enter subjects(separated by comma, up to 3): ").split(",")
 
                 fees = 0
                 for _class in classes:
@@ -52,10 +50,10 @@ def manage_student(user):
                     name,
                     password,
                     email,
+                    contact_number,
                     STUDENT,
                     nationality=nationality,
                     passport_no=passport,
-                    contact_number=contact_number,
                     address=address,
                     guardian_name=guardian_name,
                     guardian_contact=guardian_contact,
@@ -68,30 +66,31 @@ def manage_student(user):
                 )
             elif choice == "2":
                 student_email = input("Enter student email: ")
-                update_profile(
-                    user,
-                    [
-                        "nationality",
-                        "passport_no",
-                        "contact_number",
-                        "address",
-                        "guardian_name",
-                        "guardian_contact",
-                        "level",
-                        "intake",
-                        "subjects",
-                        "monthly_fee",
-                        "completed_studies",
-                    ],
-                    student_email,
-                )
+                if student := get_user_by_email(user, student_email, STUDENT):
+                    update_profile(
+                        student,
+                        [
+                            "nationality",
+                            "passport_no",
+                            "contact_number",
+                            "address",
+                            "guardian_name",
+                            "guardian_contact",
+                            "level",
+                            "intake",
+                            "monthly_fee",
+                            "completed_studies",
+                        ],
+                    )
+                else:
+                    print("Tutor with this email doesn't exist")
+                    continue
             elif choice == "3":
                 student_email = input("Enter student email: ")
                 update_student_enrollment(user, student_email)
             elif choice == "4":
                 email = input("Enter the e-mail of the student: ")
                 delete_user(user, email)
-                print("Student record has been deleted!")
             elif choice == "5":
                 email = input("Enter the e-mail of the student: ")
                 accept_payment(email)
@@ -108,19 +107,15 @@ def update_student_enrollment(user, email):
     student = get_user_by_email(user, email, role=STUDENT)
     print(f'Current subjects of the student: {", ".join(student["subjects"])}')
     subject_to_be_updated = input(
-        "Enter the subject to be replaced"
-        "(if more then 1,then separate by comma, up to 3): "
+        "Enter the subject to be replaced" "(if more then 1,then separate by comma, up to 3): "
     ).split(",")[:3]
     updated_subject = input(
-        "Enter the subject that is to replace"
-        "(if more then 1,then separate by comma, up to 3): "
+        "Enter the subject that is to replace" "(if more then 1,then separate by comma, up to 3): "
     ).split(",")[:3]
     subject_set = set(student.get("subjects"))
     subject_to_be_updated_set = set(subject_to_be_updated)
     if subject_to_be_updated_set.issubset(subject_set):
-        student["subjects"] = (
-            list(subject_set - subject_to_be_updated_set) + updated_subject
-        )
+        student["subjects"] = list(subject_set - subject_to_be_updated_set) + updated_subject
 
         fees = 0
         for _class in classes:
@@ -141,13 +136,7 @@ def update_student_enrollment(user, email):
 
 def accept_payment(email):
     user = next(
-        iter(
-            [
-                user
-                for user in users
-                if user["email"] == email and user["role"] == STUDENT
-            ]
-        ),
+        iter([user for user in users if user["email"] == email and user["role"] == STUDENT]),
         None,
     )
     if not user:

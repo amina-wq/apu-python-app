@@ -24,9 +24,7 @@ def tutor_menu(user):
 
     elif choice == 2:
         available_classes = show_available_classes(user, class_info)
-        choice = int(
-            input("What class would you like to add information to\n")
-        )
+        choice = int(input("What class would you like to add information to\n"))
         for i in available_classes:
             if i.get("index") == choice:
                 while True:
@@ -34,9 +32,7 @@ def tutor_menu(user):
                     if class_info[i.get("position")].get(key):
                         print("This information already exists")
                         continue
-                    value = str(
-                        input("What information do you want to add?\n")
-                    ).replace(" ", "")
+                    value = str(input("What information do you want to add?\n")).replace(" ", "")
                     i[key] = value
                     break
         merge_classes(available_classes, class_info)
@@ -51,9 +47,7 @@ def tutor_menu(user):
 
         if choice == 1:
             available_classes = show_available_classes(user, class_info)
-            choice = int(
-                input("What class would you like to change information of\n")
-            )
+            choice = int(input("What class would you like to change information of\n"))
             while True:
                 for available_class in available_classes:
                     if available_class.get("index") == choice:
@@ -62,23 +56,11 @@ def tutor_menu(user):
                             class_info[available_class["position"]],
                         )
                         while True:
-                            key = input(
-                                "What type of info do you want to change?\n"
-                            )
-                            if (
-                                class_info[
-                                    available_class.get("position")
-                                ].get(key)
-                                is None
-                            ):
+                            key = input("What type of info do you want to change?\n")
+                            if class_info[available_class.get("position")].get(key) is None:
                                 print("This information doesn`t exists")
                                 continue
-                            value = str(
-                                input(
-                                    "What information do you want to"
-                                    " take its place?\n"
-                                )
-                            ).replace(" ", "")
+                            value = str(input("What information do you want to" " take its place?\n")).replace(" ", "")
                             available_class[key] = value
                             break
                 if yes_or_no():
@@ -90,10 +72,7 @@ def tutor_menu(user):
                 print("What information do you want to delete?")
                 available_classes = show_available_classes(user, class_info)
                 choice = int(
-                    input(
-                        "What class would you like to delete information of\n"
-                        " (write 0 if you want to quit)\n"
-                    )
+                    input("What class would you like to delete information of\n" " (write 0 if you want to quit)\n")
                 )
                 for available_class in available_classes:
                     if available_class.get("index") == choice:
@@ -102,15 +81,8 @@ def tutor_menu(user):
                             class_info[available_class["position"]],
                         )
                         while True:
-                            key = input(
-                                "What type of info do you want to delete?\n"
-                            )
-                            if (
-                                class_info[
-                                    available_class.get("position")
-                                ].get(key)
-                                is None
-                            ):
+                            key = input("What type of info do you want to delete?\n")
+                            if class_info[available_class.get("position")].get(key) is None:
                                 print("This information doesn`t exists")
                                 break
                             if key in [
@@ -195,9 +167,7 @@ def show_available_classes(user, class_info):
                 f" ({class_interator.get('start')}"
                 f"-{class_interator.get('end')})"
             )
-            available_classes.append(
-                {"position": available_class_position, "index": index}
-            )
+            available_classes.append({"position": available_class_position, "index": index})
             available_classes[index - 1].update(class_interator)
             index += 1
         available_class_position += 1
@@ -220,13 +190,7 @@ def save(class_list) -> None:
             class_data = ""
             for key, value in i.items():
                 if type(value) is list:
-                    value = (
-                        str(value)
-                        .replace(" ", "")
-                        .strip("[")
-                        .strip("]")
-                        .replace("'", "")
-                    )
+                    value = str(value).replace(" ", "").strip("[").strip("]").replace("'", "")
                 if key == list(i.keys())[-1]:
                     class_data += f"{key}:{value}"
                 else:
