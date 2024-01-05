@@ -66,7 +66,6 @@ def manage_student(user):
                     payment_status=False,
                     completed_studies=False,
                 )
-                print("The user registered successfully")
             elif choice == "2":
                 student_email = input("Enter student email: ")
                 update_profile(

@@ -116,9 +116,8 @@ def delete_user(own_user: dict, email: str) -> None:
                 raise ValueError("You can not delete this user")
             users.remove(user)
             break
-        else:
-            print("The user with this email doesn't exist")
-            continue
+    else:
+        print("The user with this email doesn't exist")
     save_users()
 
 
@@ -176,10 +175,11 @@ def update_profile(
             menu_choice = input("Enter your choice: ")
             if menu_choice.isdigit() and 0 < int(menu_choice) <= len(menu):
                 break
+            else:
+                print("Do not use letters, try again")
         key = list(menu.keys())[int(menu_choice) - 1]
 
         new_value = input(f"Set new {key}: ")
-
         if key == "password":
             hashed_password = md5(new_value.encode()).hexdigest()
             user[key] = hashed_password
