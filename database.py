@@ -115,6 +115,7 @@ def delete_user(own_user: dict, email: str) -> None:
             ):
                 raise ValueError("You can not delete this user")
             users.remove(user)
+            print("User was deleted successfully")
             break
     else:
         print("The user with this email doesn't exist")
