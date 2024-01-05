@@ -97,6 +97,8 @@ def manage_student(user):
                 accept_payment(email)
             elif choice == "6":
                 return
+            else:
+                print("Invalid choice. Try again")
         except Exception:
             print("Something went wrong, please try again")
             continue
@@ -184,7 +186,7 @@ def receptionist_menu(user):
             elif choice == "3":
                 return logout(user)
             else:
-                raise Exception("Invalid choice. Try again")
+                print("Invalid choice. Try again")
         except Exception:
             print("Something went wrong, please try again")
             continue

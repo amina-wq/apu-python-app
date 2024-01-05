@@ -34,7 +34,7 @@ def manage_receptionists(user):
             elif choice == "3":
                 return
             else:
-                raise Exception("Invalid choice. Try again")
+                print("Invalid choice. Try again")
         except Exception:
             print("Something went wrong, please try again")
             continue
@@ -72,7 +72,7 @@ def manage_tutor(user):
             elif choice == "3":
                 return
             else:
-                raise ValueError("Invalid choice. Try again")
+                print("Invalid choice. Try again")
         except Exception:
             print("Something went wrong, please try again")
             continue
@@ -137,7 +137,7 @@ def admin_menu(user):
             elif choice == "5":
                 return logout(user)
             else:
-                raise ValueError("Invalid choice. Try again")
+                print("Invalid choice. Try again")
         except Exception:
             print("Something went wrong, please try again")
             continue
