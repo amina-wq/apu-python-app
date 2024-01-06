@@ -56,6 +56,7 @@ def show_available_classes(user, class_info):
                 f"{index}. {class_interator.get('name')}"
                 f" ({class_interator.get('start')}"
                 f"-{class_interator.get('end')})"
+                f"-{class_interator.get('dates')})"
             )
             available_classes.append(
                 {"position": available_class_position, "index": index}
