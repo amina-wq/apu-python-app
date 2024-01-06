@@ -130,8 +130,7 @@ def tutor_menu(user):
                 i["classes"].append(str(new_class["id"]))
                 user = i
                 break
-        database.users = users
-        database.save_users()
+        database.users = database.save("./database/users.txt", database.users, need_backup=True)
         save(class_info)
 
     elif choice == 7:

@@ -1,3 +1,5 @@
+import database
+
 from utils import logout
 from constants import STUDENT
 from database import (
@@ -6,7 +8,8 @@ from database import (
     delete_user,
     users,
     classes,
-    save_users,
+    requests,
+    save,
     get_user_by_email,
 )
 from datetime import datetime
@@ -86,8 +89,31 @@ def manage_student(user):
                     print("Tutor with this email doesn't exist")
                     continue
             elif choice == "3":
+                header = (
+                    "Email                    "
+                    "| Name            "
+                    "| Subject to be replaced "
+                    "| Subject that is to replace"
+                )
+                print(header)
+                print("-" * len(header))
+                for request in requests:
+                    print(
+                        f"{request['email']:<25}"
+                        f"| {request['nickname']:<15} "
+                        f"| {request['from_subject']:<22} "
+                        f"| {request['to_subject']:<22}"
+                    )
                 student_email = input("Enter student email: ")
-                update_student_enrollment(user, student_email)
+                student = get_user_by_email(user, student_email, STUDENT)
+                if not student:
+                    print("No such student found")
+                if request := next(iter([request for request in requests if request["email"] == student["email"]])):
+                    update_student_enrollment(student)
+                    requests.remove(request)
+                    database.requests = save("./database/requests.txt", requests)
+                else:
+                    print("No such request found")
             elif choice == "4":
                 email = input("Enter the e-mail of the student: ")
                 delete_user(user, email)
@@ -103,8 +129,7 @@ def manage_student(user):
             continue
 
 
-def update_student_enrollment(user, email):
-    student = get_user_by_email(user, email, role=STUDENT)
+def update_student_enrollment(student):
     print(f'Current subjects of the student: {", ".join(student["subjects"])}')
     subject_to_be_updated = input(
         "Enter the subject to be replaced" "(if more then 1,then separate by comma, up to 3): "
@@ -123,7 +148,7 @@ def update_student_enrollment(user, email):
                 fees += int(_class.get("charge", 0))
         student["monthly_fee"] = fees
 
-        save_users()
+        database.users = save("./database/users.txt", users, need_backup=True)
         print("Update was successful! ")
     else:
         print(
@@ -150,7 +175,7 @@ def accept_payment(email):
             f'The sum of {user["monthly_fee"]}\n'
             f"Date: {datetime.now()}"
         )
-        save_users()
+        database.users = save("./database/users.txt", users, need_backup=True)
         input("Press 'Enter' key to continue...")
     else:
         print("This user already paid")

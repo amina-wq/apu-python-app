@@ -9,7 +9,3 @@ ROLES_PRIORITY_MAPPER = {
     TUTOR: 2,
     STUDENT: 1,
 }
-
-
-MATH = "math"
-ENGLISH = "english"

@@ -1,3 +1,4 @@
+import os
 from shutil import copyfile
 from typing import Optional, List, Dict, Any
 from hashlib import md5
@@ -45,29 +46,47 @@ def parse_txt(path: str) -> List[dict]:
 
 users = parse_txt("database/users.txt")
 classes = parse_txt("database/classes.txt")
+requests = parse_txt("database/requests.txt")
 
 
-def save_users() -> None:
-    """The function overwrites the contents of the file
-    after changes are made to the user list
+def save(path: str, data: List[dict], need_backup: bool = False) -> list:
+    """Saves data from list to file in key1:value1;key2:value2;... format
+    You can make backup of file before saving to prevent issues with database
+
+    Args:
+        path(str): path to the file to which the data will be saved
+        data(list(dict)): data to be saved
+        need_backup(bool): True if backup of the file needed, False otherwise
+
+    Returns:
+        (list(dict)): saved data
     """
-    global users
-    copyfile("./database/users.txt", "./database/users_backup.txt")
+    if need_backup:
+        filename, extension = os.path.splitext(os.path.basename(path))
+        directory = os.path.dirname(path)
+        backup_path = os.path.join(directory, f"{filename}_backup{extension}")
+        copyfile(path, backup_path)
+
     try:
-        with open("database/users.txt", "w") as file:
-            for user in users:
-                user_data = ""
-                for key, value in user.items():
-                    postfix = "" if key == list(user.keys())[-1] else ";"
+        with open(path, "w") as file:
+            for dictionary in data:
+                row_data = ""
+                for key, value in dictionary.items():
+                    postfix = "" if key == list(dictionary.keys())[-1] else ";"
                     if isinstance(value, list):
-                        user_data += f"{key}:{','.join(value)}" + postfix
+                        row_data += f"{key}:{','.join(value)}" + postfix
                     else:
-                        user_data += f"{key}:{value}" + postfix
-                file.write(user_data + "\n")
+                        row_data += f"{key}:{value}" + postfix
+                file.write(row_data + "\n")
+        return data
     except Exception:
-        copyfile("./database/users_backup.txt", "./database/users.txt")
-        users = parse_txt("./database/users.txt")
-        print("An error occurred. The database backup was restored.")
+        if need_backup:
+            copyfile(backup_path, path)
+            print("An error occurred. The database backup was restored.")
+            return parse_txt(path)
+        else:
+            print("An error while saving occurred.")
+            return data
 
 
 def register_user(nickname: str, password: str, email: str, contact_number: str, role: str, **kwargs) -> None:
@@ -109,12 +128,14 @@ def register_user(nickname: str, password: str, email: str, contact_number: str,
 
     print("User was registered successfully")
 
+    global users
     users.append(user)
-    save_users()
+    users = save("./database/users.txt", users, need_backup=True)
 
 
 def delete_user(own_user: dict, email: str) -> None:
     """Delete user by e-mail"""
+    global users
     for user in users:
         if user["email"] == email:
             if ROLES_PRIORITY_MAPPER[user["role"]] > ROLES_PRIORITY_MAPPER[own_user["role"]]:  # type: ignore
@@ -124,7 +145,7 @@ def delete_user(own_user: dict, email: str) -> None:
             break
     else:
         print("The user with this email doesn't exist")
-    save_users()
+    users = save("./database/users.txt", users, need_backup=True)
 
 
 def update_profile(user: Dict[str, Any | List[Any]], menu_extension: Optional[list] = None) -> None:
@@ -150,6 +171,8 @@ def update_profile(user: Dict[str, Any | List[Any]], menu_extension: Optional[li
         Enter your choice: 4
         Set new age: 15
     """
+    global users
+
     if user in users:
         menu = {
             "nickname": "1. Change name",
@@ -186,7 +209,7 @@ def update_profile(user: Dict[str, Any | List[Any]], menu_extension: Optional[li
         else:
             user[key] = new_value
 
-        save_users()
+        users = save("./database/users.txt", users, need_backup=True)
         print(f"The {key} was updated successfully")
     else:
         print("Incorrect user")

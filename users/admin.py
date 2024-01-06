@@ -63,14 +63,15 @@ def manage_tutor(user):
                 email = input("Enter employees email: ")
                 contact_number = input("Enter employees contact number: ")
                 salary = input("Enter employees salary: ")
-                register_user(name, password, email, contact_number, TUTOR, classes="", salary=salary)
+                level = input("Enter employees level:")
+                register_user(name, password, email, contact_number, TUTOR, classes="", salary=salary, level=level)
             elif choice == "2":
                 email = input("Enter the employees email: ")
                 delete_user(user, email)
             elif choice == "3":
                 tutor_email = input("Enter tutor email: ")
                 if tutor := get_user_by_email(user, tutor_email, TUTOR):
-                    update_profile(tutor, ["salary", "email"])
+                    update_profile(tutor, ["salary", "email", "level"])
                 else:
                     print("Tutor with this email doesn't exist")
                     continue
@@ -87,7 +88,7 @@ def view_monthly_income():
     """Monthly income calculation"""
     income = 0
 
-    header = "Name            | Role      | Monthly Fee/Salary | Status"
+    header = "Name            | Role            | Monthly Fee/Salary | Status"
     print(header)
     print("-" * len(header))
 
@@ -98,10 +99,10 @@ def view_monthly_income():
                 income += int(user["monthly_fee"])
             else:
                 status = "Pending"
-            print(f"{user['nickname']:<15} | {user['role']:<9} | {user['monthly_fee']:<18} | {status}")
+            print(f"{user['nickname']:<15} | {user['role']:<15} | {user['monthly_fee']:<18} | {status}")
         else:
             income -= int(user["salary"])
-            print(f"{user['nickname']:<15} | {user['role']:<9} | {user['salary']:<18} | N/A")
+            print(f"{user['nickname']:<15} | {user['role']:<15} | {user['salary']:<18} | N/A")
 
     print("-" * len(header))
     print(f"Monthly income: {income}")
