@@ -21,8 +21,8 @@ def manage_receptionists(user):
                 name = input("Enter employees name: ")
                 password = input("Set employees password: ")
                 email = input("Enter employees email: ")
-                salary = input("Enter employees salary: ")
                 contact_number = input("Enter employees contact number: ")
+                salary = input("Enter employees salary: ")
                 register_user(name, password, email, contact_number, RECEPTIONIST, salary=salary)
             elif choice == "2":
                 email = input("Enter the employees email: ")
@@ -61,8 +61,8 @@ def manage_tutor(user):
                 name = input("Enter employees name: ")
                 password = input("Set employees password: ")
                 email = input("Enter employees email: ")
-                salary = input("Enter employees salary: ")
                 contact_number = input("Enter employees contact number: ")
+                salary = input("Enter employees salary: ")
                 register_user(name, password, email, contact_number, TUTOR, classes="", salary=salary)
             elif choice == "2":
                 email = input("Enter the employees email: ")
