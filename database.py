@@ -122,7 +122,7 @@ def register_user(nickname: str, password: str, email: str, contact_number: str,
 
     user.update(kwargs)
 
-    if any(";" in arg or ":" in arg for arg in user.values()):
+    if any(";" in arg or ":" in arg for arg in user.values() if isinstance(arg, str)):
         print('You can\'t use ";" and ":", try again')
         return
 
