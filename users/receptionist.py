@@ -43,6 +43,7 @@ def manage_student(user):
                 level = input("Enter Level: ")
                 intake = input("Enter Intake Month/Year: ")
                 subjects = input("Enter subjects(separated by comma, up to 3): ").split(",")
+                subjects = [subject.strip() for subject in subjects]
 
                 fees = 0
                 for _class in classes:
