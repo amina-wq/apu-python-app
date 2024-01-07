@@ -423,8 +423,12 @@ def tutor_menu(user):
                                 )
                             user = user_iterator
                             break
-                    database.users = users
-                    database.save_users()
+                    database.users = database.save(
+                        "./database/users.txt",
+                        database.users,
+                        need_backup=True,
+                    )
+                    save(class_info)
                     save(class_info)
                     if yes_or_no():
                         break
